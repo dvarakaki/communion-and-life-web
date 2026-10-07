@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Casa Comunhão e Vida — Igreja na Freguesia do Ó</title>
+  <meta name="description" content="Igreja Casa Comunhão e Vida: uma igreja, uma família e pastores que amam a sua vida. Há 25 anos na Freguesia do Ó, São Paulo.">
+  <meta name="theme-color" content="#0A0908">
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/photos/culto-05-sm.webp" type="image/webp">
+  <link rel="stylesheet" href="design-system/tokens.css">
+  <link rel="stylesheet" href="css/site.css">
+  <script>
+    (function () {
+      var d = document.documentElement, saved = null, os = false;
+      try { saved = localStorage.getItem('ccv-motion'); } catch (e) {}
+      try { os = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+      d.classList.add('js');
+      d.dataset.motion = saved || (os ? 'reduced' : 'full');
+      d.dataset.os = os ? 'reduced' : 'full';
+    })();
+  </script>
+</head>
+<body>
+
+<!-- Abertura (1x por sessão) -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <svg viewBox="0 0 100 100" class="loader__logo">
+      <path class="lp lp--house" pathLength="1" d="M74 84H24V45L50 20l27 26"/>
+      <path class="lp lp--f1" d="M50.5 33c-9 9-14 18-11 28 2 7 8 12 14 13-6-5-8-12-5-20 2-6 6-11 2-21Z"/>
+      <path class="lp lp--f2" d="M56 47c6 7 7 15 2 22-2 3-5 5-8 5 7-1 12-7 12-14 0-5-2-9-6-13Z"/>
+    </svg>
+    <p class="loader__name">Casa Comunhão <em>e Vida</em></p>
+    <span class="loader__bar"><i></i></span>
+  </div>
+</div>
+
+<!-- Ícones (Lucide, stroke 2) -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <symbol id="logo" viewBox="0 0 100 100"><path d="M74 84H24V45L50 20l27 26" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M50.5 33c-9 9-14 18-11 28 2 7 8 12 14 13-6-5-8-12-5-20 2-6 6-11 2-21Z" fill="currentColor"/><path d="M56 47c6 7 7 15 2 22-2 3-5 5-8 5 7-1 12-7 12-14 0-5-2-9-6-13Z" fill="currentColor"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></symbol>
+    <symbol id="i-flower" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 13 8-13 8V4z" fill="currentColor"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
+    <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M2.5 17a24 24 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24 24 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></symbol>
+    <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+    <symbol id="i-radio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- Barra de progresso da leitura -->
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="#inicio" class="brand" aria-label="Casa Comunhão e Vida — início">
+      <span class="brand__mark"><svg><use href="#logo"/></svg></span>
+      <span class="brand__name">Casa Comunhão<br><em>e Vida</em></span>
+    </a>
+    <nav class="nav__links" aria-label="Principal"><span class="nav__pill" aria-hidden="true"></span>
+      <a href="#sobre">Sobre</a>
+      <a href="#cultos">Cultos</a>
+      <a href="#ministerios">Ministérios</a>
+      <a href="#mensagens">Mensagens</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#redes">Redes</a>
+      <a href="#contribua">Contribua</a>
+    </nav>
+    <a href="#aovivo" class="nav__live" id="nav-live" hidden><i></i>Ao vivo</a>
+    <a href="#visite" class="btn btn--primary nav__cta magnetic">Planeje sua visita</a>
+    <button class="nav__toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer"><svg class="ico"><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="drawer__top">
+      <span class="brand__mark"><svg><use href="#logo"/></svg></span>
+      <button class="drawer__close" aria-label="Fechar menu"><svg class="ico"><use href="#i-x"/></svg></button>
+    </div>
+    <nav aria-label="Menu móvel">
+      <a href="#sobre"><small>01</small>Sobre</a>
+      <a href="#cultos"><small>02</small>Cultos</a>
+      <a href="#ministerios"><small>03</small>Ministérios</a>
+      <a href="#mensagens"><small>04</small>Mensagens</a>
+      <a href="#galeria"><small>05</small>Galeria</a>
+      <a href="#redes"><small>06</small>Redes</a>
+      <a href="#contribua"><small>07</small>Contribua</a>
+      <a href="#visite"><small>08</small>Visite-nos</a>
+    </nav>
+    <div class="drawer__foot">
+      <p>Dom 9h · 10h — Ter 9h — Qua 20h</p>
+      <div class="socials">
+        <a href="https://www.instagram.com/casacomunhaoevida/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="ico"><use href="#i-instagram"/></svg></a>
+        <a href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener" aria-label="YouTube"><svg class="ico"><use href="#i-youtube"/></svg></a>
+        <a href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="ico"><use href="#i-facebook"/></svg></a>
+        <a href="https://wa.me/5511965514736" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="ico"><use href="#i-whatsapp"/></svg></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="conteudo">
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <canvas class="hero__embers" aria-hidden="true"></canvas>
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="hero__spot" aria-hidden="true"></div>
+  <div class="container hero__grid">
+    <div class="hero__copy" data-hero-parallax>
+      <p class="eyebrow eyebrow--light hero-in" style="--i:0"><span class="dot"></span> 25 anos na Freguesia do Ó · SP</p>
+      <h1 class="hero__title" data-split="hero">
+        Uma igreja, uma família e pastores que <em>amam a sua vida.</em>
+      </h1>
+      <p class="hero__lead hero-in" style="--i:6">Um lugar de oração, acolhimento e família — guiado pelo Espírito Santo, com Jesus Cristo no centro.</p>
+      <div class="hero__actions hero-in" style="--i:7">
+        <a href="#visite" class="btn btn--primary btn--lg magnetic">Planeje sua visita <svg class="ico"><use href="#i-arrow"/></svg></a>
+        <a href="#mensagens" class="btn btn--ghost btn--lg"><svg class="ico"><use href="#i-play"/></svg> Mensagens</a>
+      </div>
+    </div>
+
+    <div class="hero__side">
+      <div class="stack" aria-hidden="true" data-hero-stack>
+        <img src="assets/photos/culto-13-sm.webp" alt="" width="480" height="600" class="stack__img stack__img--3">
+        <img src="assets/photos/culto-07-sm.webp" alt="" width="480" height="480" class="stack__img stack__img--2">
+        <img src="assets/photos/culto-05-sm.webp" alt="" width="480" height="480" class="stack__img stack__img--1">
+      </div>
+      <aside class="next-card hero-in" style="--i:8" aria-live="polite">
+        <div class="next-card__head">
+          <span class="badge" id="next-badge">Próximo encontro</span>
+          <svg class="next-card__logo"><use href="#logo"/></svg>
+        </div>
+        <p class="next-card__day" id="next-day">Domingo · 10h</p>
+        <h2 class="next-card__title" id="next-title">Culto de Celebração</h2>
+        <div class="countdown" id="countdown">
+          <div><strong data-u="d">0</strong><span>dias</span></div>
+          <div><strong data-u="h">00</strong><span>horas</span></div>
+          <div><strong data-u="m">00</strong><span>min</span></div>
+          <div><strong data-u="s">00</strong><span>seg</span></div>
+        </div>
+        <a href="#visite" class="next-card__link" id="next-link">Como chegar <svg class="ico"><use href="#i-arrow"/></svg></a>
+      </aside>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track" id="ticker">
+      <span>Oração</span><i></i><span>Acolhimento</span><i></i><span>Família</span><i></i><span>Palavra Profética</span><i></i><span>Espírito Santo</span><i></i><span>Avivamento</span><i></i><span>Comunhão</span><i></i><span>Adoração</span><i></i><span>Vida</span><i></i>
+    </div>
+  </div>
+</section>
+
+<!-- AO VIVO (aparece só quando o canal está transmitindo) -->
+<section class="live" id="aovivo" hidden aria-labelledby="live-title">
+  <div class="live__glow" aria-hidden="true"></div>
+  <div class="container live__grid">
+    <div class="live__copy">
+      <p class="live__badge"><i></i> Ao vivo agora</p>
+      <h2 class="live__title" id="live-title">Estamos ao vivo!</h2>
+      <p class="live__lead" id="live-sub">Assista ao culto de onde você estiver. Entre, ore com a gente e celebre junto com a nossa casa.</p>
+      <div class="live__actions">
+        <a class="btn btn--primary btn--lg" id="live-yt" href="https://www.youtube.com/@casacomunhaoevida2023/live" target="_blank" rel="noopener"><svg class="ico"><use href="#i-youtube"/></svg> Abrir no YouTube</a>
+        <button class="btn btn--ghost btn--lg" id="live-share" type="button"><svg class="ico"><use href="#i-share"/></svg> Convidar alguém</button>
+      </div>
+    </div>
+    <div class="live__player" id="live-player">
+      <button class="live__poster" id="live-poster" type="button" aria-label="Assistir à transmissão ao vivo">
+        <img id="live-thumb" alt="" width="1280" height="720">
+        <span class="live__play"><svg class="ico"><use href="#i-play"/></svg></span>
+        <span class="live__hint">Toque para assistir</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- CULTOS -->
+<section class="section" id="cultos">
+  <div class="container">
+    <div class="section__head">
+      <p class="eyebrow reveal">Nossa semana</p>
+      <h2 class="section__title" data-split>Encontros que <em>aquecem</em> o coração</h2>
+      <p class="section__lead reveal">Toda semana abrimos as portas para orar, adorar e ouvir a Palavra. Você é muito bem-vindo — chegue como estiver.</p>
+    </div>
+
+    <div class="week reveal" id="week" role="list" aria-label="Dias da semana com encontros"></div>
+
+    <div class="services" id="services">
+      <article class="service reveal" data-dow="2">
+        <div class="service__icon"><svg class="ico"><use href="#i-sparkles"/></svg></div>
+        <p class="service__when">Terça · 9h</p>
+        <h3>Reunião de Oração</h3>
+        <p>Uma manhã para buscar a Deus juntos e interceder pela nossa casa, famílias e região.</p>
+        <span class="service__today">Hoje</span>
+      </article>
+      <article class="service reveal" data-dow="3">
+        <div class="service__icon"><svg class="ico"><use href="#i-flame"/></svg></div>
+        <p class="service__when">Quarta · 20h</p>
+        <h3>Culto Profético</h3>
+        <p>Palavra profética, adoração e ministração no meio da semana para fortalecer a sua fé.</p>
+        <span class="service__today">Hoje</span>
+      </article>
+      <article class="service reveal" data-dow="0">
+        <div class="service__icon"><svg class="ico"><use href="#i-book"/></svg></div>
+        <p class="service__when">Domingo · 9h</p>
+        <h3>Discipulado</h3>
+        <p>Crescimento na Palavra em grupos — para quem está chegando e para quem já caminha conosco.</p>
+        <span class="service__today">Hoje</span>
+      </article>
+      <article class="service service--feature reveal" data-dow="0">
+        <img class="service__bg" src="assets/photos/culto-07-sm.webp" alt="" width="480" height="480" loading="lazy" decoding="async">
+        <div class="service__icon"><svg class="ico"><use href="#i-users"/></svg></div>
+        <p class="service__when">Domingo · 10h</p>
+        <h3>Culto de Celebração</h3>
+        <p>Nosso principal encontro: louvor, Palavra e comunhão com toda a família — com programação para as crianças.</p>
+        <span class="service__today">Hoje</span>
+      </article>
+    </div>
+    <div class="dots" data-dots-for="services" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="section section--dark" id="sobre">
+  <div class="container about">
+    <div class="about__media">
+      <figure class="photo reveal-img">
+        <img src="assets/photos/pastores.webp" alt="Pastor Luís Fernando e Pastora Patrícia lado a lado, sorrindo" width="640" height="640" loading="lazy" decoding="async" data-parallax="0.08">
+        <figcaption>Pr. Luís Fernando &amp; Pra. Patrícia</figcaption>
+      </figure>
+      <div class="about__stat reveal" data-reveal="zoom">
+        <strong data-count="25">0</strong>
+        <span>anos de história<br>na Freguesia do Ó</span>
+      </div>
+    </div>
+
+    <div class="about__copy">
+      <p class="eyebrow eyebrow--light reveal">Nossa história</p>
+      <h2 class="section__title" data-split>Nascemos por uma <em>Palavra.</em></h2>
+      <p class="scrub" data-scrub>Há vinte e cinco anos começamos nossa jornada na casa da Pastora Marli, como uma célula. Crescemos, e o Senhor nos trouxe para o endereço onde estamos desde então. Aqui vivemos muitas fases que nos aperfeiçoaram e nos firmaram como igreja no nosso bairro.</p>
+
+      <ol class="timeline reveal" data-timeline>
+        <li><span>O começo</span>Uma célula na casa da Pastora Marli.</li>
+        <li><span>Uma casa</span>O Senhor nos traz ao endereço onde estamos até hoje.</li>
+        <li><span>Hoje</span>Firmes no chamado de ser uma Casa de Oração na região.</li>
+      </ol>
+
+      <blockquote class="quote reveal">
+        <p>“Venha nos visitar — será um prazer te abraçar e celebrar ao Senhor junto com você.”</p>
+        <cite>Pr. Luís Fernando e Pra. Patrícia</cite>
+      </blockquote>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="beliefs">
+      <article class="belief reveal">
+        <svg class="ico"><use href="#i-flame"/></svg>
+        <h3>Espírito Santo</h3>
+        <p>Cremos que o Espírito Santo é a fonte de vida e nos guia em cada passo.</p>
+      </article>
+      <article class="belief reveal">
+        <svg class="ico"><use href="#i-heart"/></svg>
+        <h3>Jesus no centro</h3>
+        <p>Jesus Cristo é o Centro, o Pão Vivo que desceu do céu e restaurou a nossa fé.</p>
+      </article>
+      <article class="belief reveal">
+        <svg class="ico"><use href="#i-sparkles"/></svg>
+        <h3>Avivamento</h3>
+        <p>Oramos por um tempo de avivamento contínuo para crescer, prosperar e avançar.</p>
+      </article>
+      <article class="belief reveal">
+        <svg class="ico"><use href="#i-book"/></svg>
+        <h3>O Reino primeiro</h3>
+        <p>Buscamos o Reino de Deus em primeiro lugar — e o Senhor tem cuidado de nós.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- FAIXA DE IMPACTO -->
+<div class="statement" aria-hidden="true">
+  <div class="statement__row" data-shift="-1"><span>Comunhão</span><i></i><span>e</span><i></i><span>Vida</span><i></i><span>Comunhão</span><i></i><span>e</span><i></i><span>Vida</span></div>
+  <div class="statement__row statement__row--outline" data-shift="1"><span>Oração</span><i></i><span>Família</span><i></i><span>Avivamento</span><i></i><span>Oração</span><i></i><span>Família</span><i></i><span>Avivamento</span></div>
+</div>
+
+<!-- MINISTÉRIOS -->
+<section class="section" id="ministerios">
+  <div class="container">
+    <div class="section__head section__head--split">
+      <div>
+        <p class="eyebrow reveal">Ministérios</p>
+        <h2 class="section__title" data-split>Um lugar para <em>cada</em> geração</h2>
+      </div>
+      <p class="section__lead reveal">Da criança ao casal, dos jovens às mulheres: há uma família esperando por você em cada fase da vida.</p>
+    </div>
+
+    <div class="bento">
+      <article class="tile tile--kids reveal" data-reveal="zoom">
+        <img class="tile__photo" src="assets/photos/kids.webp" alt="Criança sorrindo no ministério infantil" width="540" height="960" loading="lazy" decoding="async">
+        <div class="tile__icon"><svg class="ico"><use href="#i-smile"/></svg></div>
+        <p class="tile__tag">Ministério Infantil</p>
+        <h3 class="tile__kids">Kids</h3>
+        <p>Ensino bíblico criativo e seguro para as crianças durante o Culto de Celebração.</p>
+      </article>
+      <article class="tile tile--youth reveal" data-reveal="zoom">
+        <img class="tile__photo" src="assets/photos/culto-05-sm.webp" alt="" width="480" height="480" loading="lazy" decoding="async">
+        <div class="tile__icon"><svg class="ico"><use href="#i-users"/></svg></div>
+        <p class="tile__tag">Jovens</p>
+        <h3>Uma geração em <em>chamas</em></h3>
+        <p>Comunhão, adoração e propósito para a juventude.</p>
+      </article>
+      <article class="tile tile--women reveal" data-reveal="zoom">
+        <img class="tile__photo" src="assets/photos/mulheres-sm.webp" alt="Pastoras ministrando no Encontro de Mulheres" width="270" height="480" loading="lazy" decoding="async">
+        <div class="tile__icon"><svg class="ico"><use href="#i-flower"/></svg></div>
+        <p class="tile__tag">Encontro de Mulheres</p>
+        <h3>Mulheres que <em>florescem</em></h3>
+      </article>
+      <article class="tile tile--couples reveal" data-reveal="zoom">
+        <div class="tile__icon"><svg class="ico"><use href="#i-heart"/></svg></div>
+        <p class="tile__tag">Encontro de Casais</p>
+        <h3>Famílias fortes</h3>
+        <p>Casamentos edificados na rocha.</p>
+      </article>
+      <article class="tile tile--conf reveal" data-reveal="zoom">
+        <div class="tile__icon"><svg class="ico"><use href="#i-mic"/></svg></div>
+        <p class="tile__tag">Conferência anual</p>
+        <h3>Conf</h3>
+        <ul class="chips" aria-label="Edições">
+          <li>2022</li><li>2023</li><li>2024</li><li class="is-current">2025</li>
+        </ul>
+      </article>
+      <article class="tile tile--prayer reveal" data-reveal="zoom">
+        <img class="tile__photo" src="assets/photos/culto-11-sm.webp" alt="" width="480" height="600" loading="lazy" decoding="async">
+        <div class="tile__icon"><svg class="ico"><use href="#i-sparkles"/></svg></div>
+        <p class="tile__tag">Casa de Oração</p>
+        <h3>Intercessão</h3>
+        <p>Toda terça, 9h.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- MENSAGENS -->
+<section class="section section--ink" id="mensagens">
+  <div class="container">
+    <div class="section__head section__head--split">
+      <div>
+        <p class="eyebrow eyebrow--light reveal">Mensagens</p>
+        <h2 class="section__title" data-split>A Palavra que <em>incendeia</em></h2>
+      </div>
+      <div class="rail-controls reveal">
+        <button class="rail-btn" data-dir="-1" aria-label="Mensagens anteriores"><svg class="ico"><use href="#i-left"/></svg></button>
+        <button class="rail-btn" data-dir="1" aria-label="Próximas mensagens"><svg class="ico"><use href="#i-right"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rail" id="rail" tabindex="0" aria-label="Séries de mensagens — arraste para o lado">
+    <a class="sermon" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+      <img src="assets/photos/serie-compreendendo-sm.webp" srcset="assets/photos/serie-compreendendo-sm.webp 480w, assets/photos/serie-compreendendo.webp 960w" sizes="320px" alt="Série: Compreendendo os planos de Deus" width="480" height="481" loading="lazy" decoding="async">
+      <span class="sermon__play"><svg class="ico"><use href="#i-play"/></svg></span>
+    </a>
+    <a class="sermon" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+      <img src="assets/photos/serie-novo-tempo-sm.webp" srcset="assets/photos/serie-novo-tempo-sm.webp 480w, assets/photos/serie-novo-tempo.webp 960w" sizes="320px" alt="Mensagem: Começando um novo tempo" width="480" height="480" loading="lazy" decoding="async">
+      <span class="sermon__play"><svg class="ico"><use href="#i-play"/></svg></span>
+    </a>
+    <a class="sermon" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+      <img src="assets/photos/serie-novo-dia-sm.webp" srcset="assets/photos/serie-novo-dia-sm.webp 480w, assets/photos/serie-novo-dia.webp 960w" sizes="320px" alt="Mensagem: Um novo dia, um amanhecer abençoado" width="480" height="480" loading="lazy" decoding="async">
+      <span class="sermon__play"><svg class="ico"><use href="#i-play"/></svg></span>
+    </a>
+    <a class="sermon" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+      <img src="assets/photos/serie-capacitados-sm.webp" srcset="assets/photos/serie-capacitados-sm.webp 480w, assets/photos/serie-capacitados.webp 960w" sizes="320px" alt="Série: Capacitados pelo Espírito Santo" width="480" height="600" loading="lazy" decoding="async">
+      <span class="sermon__play"><svg class="ico"><use href="#i-play"/></svg></span>
+    </a>
+    <a class="sermon" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+      <img src="assets/photos/serie-batalhando-sm.webp" srcset="assets/photos/serie-batalhando-sm.webp 480w, assets/photos/serie-batalhando.webp 960w" sizes="320px" alt="Mensagem: Batalhando pela fé" width="480" height="600" loading="lazy" decoding="async">
+      <span class="sermon__play"><svg class="ico"><use href="#i-play"/></svg></span>
+    </a>
+    <a class="sermon" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+      <img src="assets/photos/serie-oracao-sm.webp" srcset="assets/photos/serie-oracao-sm.webp 480w, assets/photos/serie-oracao.webp 960w" sizes="320px" alt="Mensagem: Oração" width="480" height="480" loading="lazy" decoding="async">
+      <span class="sermon__play"><svg class="ico"><use href="#i-play"/></svg></span>
+    </a>
+    <a class="sermon" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+      <img src="assets/photos/serie-espirito-santo-sm.webp" srcset="assets/photos/serie-espirito-santo-sm.webp 480w, assets/photos/serie-espirito-santo.webp 960w" sizes="320px" alt="Série: Capacitados pelo Espírito Santo — culto" width="480" height="480" loading="lazy" decoding="async">
+      <span class="sermon__play"><svg class="ico"><use href="#i-play"/></svg></span>
+    </a>
+    <a class="sermon sermon--cta" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+      <svg class="ico ico--xl"><use href="#i-youtube"/></svg>
+      <span class="sermon__title"><small>Todas as mensagens no</small> YouTube</span>
+      <span class="sermon__more">Inscreva-se <svg class="ico"><use href="#i-arrow"/></svg></span>
+    </a>
+  </div>
+  <div class="container"><div class="rail-progress" aria-hidden="true"><span id="rail-progress"></span></div></div>
+</section>
+
+<!-- GALERIA -->
+<section class="section section--flush" id="galeria">
+  <div class="container">
+    <div class="section__head section__head--split">
+      <div>
+        <p class="eyebrow reveal">Vida em comunidade</p>
+        <h2 class="section__title" data-split>Assim é um <em>domingo</em> com a gente</h2>
+      </div>
+      <a href="https://www.instagram.com/casacomunhaoevida/" target="_blank" rel="noopener" class="ig-link reveal">
+        <svg class="ico"><use href="#i-instagram"/></svg>
+        <span><strong>@casacomunhaoevida</strong><small>Siga no Instagram</small></span>
+        <svg class="ico"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <div class="gallery__row" data-dir="-1">
+      <button class="shot" data-full="assets/photos/culto-05.webp"><img src="assets/photos/culto-05-sm.webp" alt="Louvor e adoração no culto de domingo" width="480" height="480" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-09.webp"><img src="assets/photos/culto-09-sm.webp" alt="Ceia do Senhor: pão e cálice e irmãos em oração" width="480" height="600" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-01.webp"><img src="assets/photos/culto-01-sm.webp" alt="Momentos do culto de domingo" width="480" height="481" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-13.webp"><img src="assets/photos/culto-13-sm.webp" alt="Igreja reunida em adoração" width="480" height="600" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-03.webp"><img src="assets/photos/culto-03-sm.webp" alt="Ministração da Palavra" width="480" height="480" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-07.webp"><img src="assets/photos/culto-07-sm.webp" alt="Banda de louvor no culto" width="480" height="480" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-15.webp"><img src="assets/photos/culto-15-sm.webp" alt="Culto de celebração" width="480" height="480" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-11.webp"><img src="assets/photos/culto-11-sm.webp" alt="Oração e comunhão" width="480" height="600" loading="lazy" decoding="async"></button>
+    </div>
+    <div class="gallery__row" data-dir="1">
+      <button class="shot" data-full="assets/photos/culto-06.webp"><img src="assets/photos/culto-06-sm.webp" alt="Louvor no culto de domingo" width="480" height="480" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-10.webp"><img src="assets/photos/culto-10-sm.webp" alt="Momentos da Ceia do Senhor" width="480" height="598" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-02.webp"><img src="assets/photos/culto-02-sm.webp" alt="Culto de domingo" width="480" height="481" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-14.webp"><img src="assets/photos/culto-14-sm.webp" alt="Irmãos reunidos no culto" width="480" height="600" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-04.webp"><img src="assets/photos/culto-04-sm.webp" alt="Pregação no culto" width="480" height="480" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-08.webp"><img src="assets/photos/culto-08-sm.webp" alt="Adoração com a igreja" width="480" height="480" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-16.webp"><img src="assets/photos/culto-16-sm.webp" alt="Culto capacitados pelo Espírito Santo" width="480" height="480" loading="lazy" decoding="async"></button>
+      <button class="shot" data-full="assets/photos/culto-12.webp"><img src="assets/photos/culto-12-sm.webp" alt="Momento de oração" width="480" height="600" loading="lazy" decoding="async"></button>
+    </div>
+  </div>
+</section>
+
+<!-- REDES -->
+<section class="section" id="redes">
+  <div class="container">
+    <div class="section__head section__head--split">
+      <div>
+        <p class="eyebrow reveal">Acompanhe</p>
+        <h2 class="section__title" data-split>Nossa casa nas <em>redes</em></h2>
+      </div>
+      <p class="section__lead reveal">Avisos, fotos e mensagens do dia a dia da igreja. Acompanhe pelo Facebook, YouTube e Instagram.</p>
+    </div>
+
+    <div class="social-grid">
+      <article class="fb reveal" data-reveal="left">
+        <header class="fb__head">
+          <span class="fb__logo"><svg class="ico"><use href="#i-facebook"/></svg></span>
+          <span class="fb__who"><strong>Igreja Casa Comunhão e Vida</strong><small>São Paulo, SP · Facebook</small></span>
+          <a class="fb__open" href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener" aria-label="Abrir a página no Facebook"><svg class="ico"><use href="#i-external"/></svg></a>
+        </header>
+        <div class="fb__frame" id="fb-frame">
+          <div class="fb__skeleton" aria-hidden="true"><i></i><i></i><i></i></div>
+          <p class="fb__fallback">Se a página não aparecer, <a href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener">abra direto no Facebook</a>.</p>
+        </div>
+      </article>
+
+      <div class="social-cards">
+        <a class="scard scard--yt reveal" data-reveal="right" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+          <svg class="ico ico--xl"><use href="#i-youtube"/></svg>
+          <span class="scard__body"><small>YouTube</small><strong>Cultos e mensagens completas</strong><em>Inscreva-se no canal</em></span>
+          <svg class="ico scard__go"><use href="#i-arrow"/></svg>
+        </a>
+        <a class="scard scard--ig reveal" data-reveal="right" href="https://www.instagram.com/casacomunhaoevida/" target="_blank" rel="noopener">
+          <svg class="ico ico--xl"><use href="#i-instagram"/></svg>
+          <span class="scard__body"><small>Instagram</small><strong>@casacomunhaoevida</strong><em>Fotos, stories e avisos</em></span>
+          <svg class="ico scard__go"><use href="#i-arrow"/></svg>
+        </a>
+        <a class="scard scard--fb reveal" data-reveal="right" href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener">
+          <svg class="ico ico--xl"><use href="#i-facebook"/></svg>
+          <span class="scard__body"><small>Facebook</small><strong>Igreja Casa Comunhão e Vida</strong><em>Curta a nossa página</em></span>
+          <svg class="ico scard__go"><use href="#i-arrow"/></svg>
+        </a>
+        <a class="scard scard--wa reveal" data-reveal="right" href="https://wa.me/5511965514736" target="_blank" rel="noopener">
+          <svg class="ico ico--xl"><use href="#i-whatsapp"/></svg>
+          <span class="scard__body"><small>WhatsApp</small><strong>(11) 96551-4736</strong><em>Fale com a gente</em></span>
+          <svg class="ico scard__go"><use href="#i-arrow"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENDA -->
+<section class="section" id="agenda">
+  <div class="container agenda">
+    <div>
+      <p class="eyebrow reveal">Agenda</p>
+      <h2 class="section__title" data-split>Próximos <em>encontros</em></h2>
+      <p class="section__lead reveal">Atualizada automaticamente com a programação semanal da igreja.</p>
+    </div>
+    <ul class="agenda__list" id="agenda-list"></ul>
+  </div>
+</section>
+
+<!-- CONTRIBUA -->
+<section class="section section--tight" id="contribua">
+  <div class="container">
+    <div class="give reveal" data-reveal="zoom">
+      <div class="give__copy">
+        <p class="eyebrow eyebrow--light">Dízimos e ofertas</p>
+        <h2 class="section__title">Semeie no <em>Reino</em></h2>
+        <p>Sua generosidade sustenta a obra, o cuidado com as famílias e o evangelismo na nossa região. “Cada um dê conforme determinou em seu coração.” — 2 Coríntios 9:7</p>
+      </div>
+      <div class="give__card">
+        <div class="give__icon"><svg class="ico"><use href="#i-gift"/></svg></div>
+        <p class="give__label">Chave PIX · CNPJ</p>
+        <p class="give__key" id="pix-key" data-copy="05136068000116" aria-label="CNPJ 05.136.068/0001-16">05.136.068/0001-16</p>
+        <button class="btn btn--light btn--block" id="copy-pix"><svg class="ico"><use href="#i-copy"/></svg> <span>Copiar chave</span></button>
+        <p class="give__note">Igreja Casa Comunhão e Vida · Caixa Econômica Federal</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISITE -->
+<section class="section" id="visite">
+  <div class="container visit">
+    <div class="visit__info">
+      <p class="eyebrow reveal">Visite-nos</p>
+      <h2 class="section__title" data-split>Tem um lugar <em>guardado</em> para você</h2>
+      <ul class="visit__facts reveal">
+        <li><svg class="ico"><use href="#i-pin"/></svg><span><strong>Freguesia do Ó</strong>São Paulo · SP</span></li>
+        <li><svg class="ico"><use href="#i-clock"/></svg><span><strong>Domingo 9h e 10h</strong>Terça 9h · Quarta 20h</span></li>
+        <li><svg class="ico"><use href="#i-whatsapp"/></svg><span><strong>(11) 96551-4736</strong>Fale com a gente pelo WhatsApp</span></li>
+      </ul>
+      <div class="map reveal">
+        <iframe title="Mapa — Igreja Casa Comunhão e Vida" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Igreja%20Casa%20Comunh%C3%A3o%20e%20Vida%20Freguesia%20do%20%C3%93%20S%C3%A3o%20Paulo&output=embed"></iframe>
+      </div>
+    </div>
+
+    <form class="visit__form reveal" data-reveal="right" id="visit-form" novalidate>
+      <h3>Planeje sua visita</h3>
+      <p class="muted">Conte pra gente quando você vem — vamos te receber na porta.</p>
+      <div class="field">
+        <label for="f-name">Seu nome <span aria-hidden="true">*</span></label>
+        <input id="f-name" name="name" autocomplete="name" required>
+        <p class="field__error" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="f-service">Qual encontro? <span aria-hidden="true">*</span></label>
+        <select id="f-service" name="service" required>
+          <option value="Culto de Celebração (domingo, 10h)">Culto de Celebração — domingo, 10h</option>
+          <option value="Discipulado (domingo, 9h)">Discipulado — domingo, 9h</option>
+          <option value="Culto Profético (quarta, 20h)">Culto Profético — quarta, 20h</option>
+          <option value="Reunião de Oração (terça, 9h)">Reunião de Oração — terça, 9h</option>
+        </select>
+      </div>
+      <fieldset class="field">
+        <legend>Quem vem com você?</legend>
+        <div class="pills">
+          <label><input type="checkbox" name="with" value="família"><span>Família</span></label>
+          <label><input type="checkbox" name="with" value="crianças"><span>Crianças</span></label>
+          <label><input type="checkbox" name="with" value="amigos"><span>Amigos</span></label>
+          <label><input type="checkbox" name="with" value="sozinho(a)"><span>Sozinho(a)</span></label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="f-msg">Pedido de oração ou mensagem <small>(opcional)</small></label>
+        <textarea id="f-msg" name="msg" rows="3"></textarea>
+      </div>
+      <button class="btn btn--primary btn--block btn--lg" type="submit"><svg class="ico"><use href="#i-whatsapp"/></svg> Enviar pelo WhatsApp</button>
+      <p class="field__help">Abre o WhatsApp com a mensagem pronta — nada é enviado sem você confirmar.</p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__big" aria-hidden="true"><svg><use href="#logo"/></svg><span>Comunhão <em>e Vida</em></span></div>
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <p>Aqui você tem uma igreja, uma família e pastores que amam a sua vida.</p>
+    </div>
+    <div class="footer__cols">
+      <div>
+        <h4>Encontros</h4>
+        <p>Terça 9h · Reunião de Oração<br>Quarta 20h · Culto Profético<br>Domingo 9h · Discipulado<br>Domingo 10h · Culto de Celebração</p>
+      </div>
+      <div>
+        <h4>Conecte-se</h4>
+        <div class="socials">
+          <a href="https://www.instagram.com/casacomunhaoevida/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="ico"><use href="#i-instagram"/></svg></a>
+          <a href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener" aria-label="YouTube"><svg class="ico"><use href="#i-youtube"/></svg></a>
+          <a href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="ico"><use href="#i-facebook"/></svg></a>
+          <a href="https://wa.me/5511965514736" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="ico"><use href="#i-whatsapp"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <span>© <span id="year">2026</span> Igreja Casa Comunhão e Vida · Freguesia do Ó, São Paulo</span>
+    <button class="motion-toggle" id="motion-toggle" type="button" aria-pressed="true"><span class="motion-toggle__knob"></span><span class="motion-toggle__label">Animações</span></button>
+  </div>
+</footer>
+
+<!-- Voltar ao topo (anel = progresso da página) -->
+<button class="to-top" id="to-top" aria-label="Voltar ao início">
+  <svg class="to-top__ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22"/><circle cx="24" cy="24" r="22" id="to-top-ring"/></svg>
+  <svg class="ico"><use href="#i-up"/></svg>
+  <span class="to-top__label">Topo</span>
+</button>
+
+<a class="wa-fab" href="https://wa.me/5511965514736" target="_blank" rel="noopener" aria-label="Fale conosco pelo WhatsApp"><svg class="ico"><use href="#i-whatsapp"/></svg></a>
+
+<!-- Barra de ações (mobile) -->
+<nav class="mbar" id="mbar" aria-label="Ações rápidas">
+  <a href="#cultos"><svg class="ico"><use href="#i-clock"/></svg><span>Horários</span></a>
+  <a href="#visite" class="mbar__main"><svg class="ico"><use href="#i-pin"/></svg><span>Visite</span></a>
+  <a href="https://wa.me/5511965514736" target="_blank" rel="noopener"><svg class="ico"><use href="#i-whatsapp"/></svg><span>WhatsApp</span></a>
+</nav>
+
+<!-- Lightbox da galeria -->
+<dialog class="lightbox" id="lightbox" aria-label="Foto ampliada">
+  <img id="lightbox-img" alt="">
+  <p class="lightbox__cap" id="lightbox-cap"></p>
+  <button class="lightbox__btn lightbox__close" data-lb="close" aria-label="Fechar"><svg class="ico"><use href="#i-x"/></svg></button>
+  <button class="lightbox__btn lightbox__prev" data-lb="-1" aria-label="Foto anterior"><svg class="ico"><use href="#i-left"/></svg></button>
+  <button class="lightbox__btn lightbox__next" data-lb="1" aria-label="Próxima foto"><svg class="ico"><use href="#i-right"/></svg></button>
+</dialog>
+
+<script src="js/config.js"></script>
+<script src="js/site.js" defer></script>
+</body>
+</html>

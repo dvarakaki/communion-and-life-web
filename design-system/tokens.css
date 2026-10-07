@@ -1,0 +1,101 @@
+/* Design Tokens - Auto-generated */
+/* Do not edit directly - modify tokens.json instead */
+
+/* === PRIMITIVES === */
+:root {
+  --primitive-color-ink-50: #FAF7F2;
+  --primitive-color-ink-100: #F1ECE4;
+  --primitive-color-ink-200: #E4DED5;
+  --primitive-color-ink-300: #CFC8BE;
+  --primitive-color-ink-400: #9A9188;
+  --primitive-color-ink-500: #6B645C;
+  --primitive-color-ink-700: #2E2A26;
+  --primitive-color-ink-800: #1F1C19;
+  --primitive-color-ink-900: #141210;
+  --primitive-color-ink-950: #0A0908;
+  --primitive-color-fire-300: #FDBA74;
+  --primitive-color-fire-400: #FB923C;
+  --primitive-color-fire-500: #F26B1D;
+  --primitive-color-fire-600: #D9480F;
+  --primitive-color-fire-700: #B03A0B;
+  --primitive-color-fire-800: #7C2D12;
+  --primitive-color-amber-400: #FBBF24;
+  --primitive-color-amber-500: #F59E0B;
+  --primitive-color-rose-300: #F2B8C6;
+  --primitive-color-rose-600: #C2456A;
+  --primitive-color-whatsapp: #1FA855;
+  --primitive-color-white: #FFFFFF;
+  --primitive-font-display: 'Archivo', 'Arial Narrow', sans-serif;
+  --primitive-font-serif: 'Instrument Serif', Georgia, serif;
+  --primitive-font-body: 'Inter', system-ui, sans-serif;
+  --primitive-fontSize-xs: 0.75rem;
+  --primitive-fontSize-sm: 0.875rem;
+  --primitive-fontSize-base: 1rem;
+  --primitive-fontSize-lg: 1.125rem;
+  --primitive-fontSize-xl: 1.375rem;
+  --primitive-fontSize-2xl: 1.75rem;
+  --primitive-fontSize-3xl: clamp(2rem, 4vw, 3rem);
+  --primitive-fontSize-4xl: clamp(2.5rem, 6vw, 4.5rem);
+  --primitive-fontSize-5xl: clamp(2.75rem, 8vw, 6.5rem);
+  --primitive-spacing-1: 0.25rem;
+  --primitive-spacing-2: 0.5rem;
+  --primitive-spacing-3: 0.75rem;
+  --primitive-spacing-4: 1rem;
+  --primitive-spacing-6: 1.5rem;
+  --primitive-spacing-8: 2rem;
+  --primitive-spacing-12: 3rem;
+  --primitive-spacing-16: 4rem;
+  --primitive-spacing-24: 6rem;
+  --primitive-spacing-32: 8rem;
+  --primitive-radius-sm: 8px;
+  --primitive-radius-md: 14px;
+  --primitive-radius-lg: 24px;
+  --primitive-radius-xl: 36px;
+  --primitive-radius-full: 9999px;
+  --primitive-shadow-sm: 0 1px 2px rgb(10 9 8 / 0.06);
+  --primitive-shadow-md: 0 8px 24px -8px rgb(10 9 8 / 0.18);
+  --primitive-shadow-lg: 0 24px 60px -20px rgb(10 9 8 / 0.35);
+  --primitive-shadow-glow: 0 0 0 1px rgb(242 107 29 / 0.25), 0 20px 60px -15px rgb(242 107 29 / 0.55);
+  --primitive-duration-fast: 150ms;
+  --primitive-duration-normal: 250ms;
+  --primitive-duration-slow: 600ms;
+  --primitive-easing-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* === SEMANTIC === */
+:root {
+  --color-background: #FAF7F2;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F1ECE4;
+  --color-foreground: #0A0908;
+  --color-muted: #6B645C;
+  --color-border: #E4DED5;
+  --color-inverse-bg: #0A0908;
+  --color-inverse-surface: #1F1C19;
+  --color-inverse-fg: #FAF7F2;
+  --color-inverse-muted: #9A9188;
+  --color-primary: #0A0908;
+  --color-on-primary: #FFFFFF;
+  --color-accent: #D9480F;
+  --color-accent-bright: #F26B1D;
+  --color-accent-soft: #FDBA74;
+  --color-glow: #FBBF24;
+  --color-ring: #F26B1D;
+  --font-heading: 'Archivo', 'Arial Narrow', sans-serif;
+  --font-accent: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+/* === COMPONENTS === */
+:root {
+  --button-primary-bg: #D9480F;
+  --button-primary-fg: #FFFFFF;
+  --button-primary-hover: #B03A0B;
+  --button-radius: 9999px;
+  --button-height: 3rem;
+  --card-bg: #FFFFFF;
+  --card-border: #E4DED5;
+  --card-radius: 24px;
+  --card-shadow: 0 8px 24px -8px rgb(10 9 8 / 0.18);
+  --nav-height: 4.5rem;
+}
