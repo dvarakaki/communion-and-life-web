@@ -15,19 +15,87 @@
     sset: (k, v) => { try { sessionStorage.setItem(k, v); } catch {} },
   };
 
-  // ================= Alternador de animações (+ aviso quando o sistema reduz) =================
-  const motionBtn = $('#motion-toggle');
-  motionBtn.setAttribute('aria-pressed', String(!reduceMotion));
-  motionBtn.querySelector('.motion-toggle__label').textContent = reduceMotion ? 'Animações reduzidas' : 'Animações ligadas';
-  motionBtn.addEventListener('click', () => { store.set('ccv-motion', reduceMotion ? 'full' : 'reduced'); location.reload(); });
-  if (root.dataset.os === 'reduced' && !store.get('ccv-motion') && !store.get('ccv-motion-note')) {
-    const note = document.createElement('div');
-    note.className = 'motion-note'; note.setAttribute('role', 'status');
-    note.innerHTML = '<span>Seu dispositivo pede menos movimento, então as animações foram reduzidas.</span><button type="button">Ativar</button><button type="button" class="motion-note__x" aria-label="Dispensar aviso">✕</button>';
-    const [on, x] = $$('button', note);
-    on.addEventListener('click', () => { store.set('ccv-motion', 'full'); location.reload(); });
-    x.addEventListener('click', () => { store.set('ccv-motion-note', '1'); note.remove(); });
-    document.body.appendChild(note);
+  // ================= Cookies e consentimento (LGPD) =================
+  // Só cookies essenciais por padrão. YouTube, Facebook e Google Maps carregam apenas com permissão.
+  const CONSENT_VERSION = 1;
+  const OPTIONAL = ['video', 'social', 'maps'];
+  function readConsent() {
+    const m = document.cookie.match(/(?:^|;\s*)ccv_consent=([^;]*)/);
+    if (!m) return null;
+    try { const c = JSON.parse(decodeURIComponent(m[1])); return c.v === CONSENT_VERSION ? c : null; } catch { return null; }
+  }
+  function writeConsent(choice) {
+    const c = { v: CONSENT_VERSION, at: new Date().toISOString() };
+    OPTIONAL.forEach(k => (c[k] = !!choice[k]));
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `ccv_consent=${encodeURIComponent(JSON.stringify(c))}; Max-Age=${60 * 60 * 24 * 180}; Path=/; SameSite=Lax${secure}`;
+    return c;
+  }
+  let consent = readConsent();
+  const allowed = k => !!(consent && consent[k]);
+  const consentHooks = [];
+  const onConsent = fn => consentHooks.push(fn);
+
+  const cookieBox = $('#cookies'), prefsForm = $('#cookies-prefs'), customBtn = $('[data-consent="custom"]', cookieBox);
+  function showPrefs(open) {
+    prefsForm.hidden = !open;
+    customBtn.setAttribute('aria-expanded', String(open));
+    OPTIONAL.forEach(k => (prefsForm.elements[k].checked = allowed(k)));
+  }
+  function openCookies(withPrefs = false) {
+    cookieBox.hidden = false;
+    showPrefs(withPrefs);
+    requestAnimationFrame(() => cookieBox.classList.add('is-open'));
+    $('button', cookieBox).focus({ preventScroll: true });
+  }
+  function closeCookies() {
+    cookieBox.classList.remove('is-open');
+    setTimeout(() => (cookieBox.hidden = true), 300);
+  }
+  function setConsent(choice) {
+    const before = consent;
+    consent = writeConsent(choice);
+    closeCookies();
+    // Se alguém retirou uma permissão, recarrega para descarregar o conteúdo de terceiros já aberto.
+    if (before && OPTIONAL.some(k => before[k] && !consent[k])) { location.reload(); return; }
+    consentHooks.forEach(fn => fn());
+  }
+  cookieBox.addEventListener('click', e => {
+    const b = e.target.closest('[data-consent]');
+    if (!b) return;
+    const kind = b.dataset.consent;
+    if (kind === 'all') setConsent({ video: true, social: true, maps: true });
+    else if (kind === 'reject') setConsent({});
+    else showPrefs(prefsForm.hidden);
+  });
+  prefsForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const choice = {};
+    OPTIONAL.forEach(k => (choice[k] = prefsForm.elements[k].checked));
+    setConsent(choice);
+  });
+  $$('[data-open-cookies]').forEach(b => b.addEventListener('click', () => openCookies(true)));
+  if (!consent) setTimeout(() => openCookies(false), 1200);
+  if (location.hash === '#cookies') openCookies(true);
+
+  // Aviso no lugar de um conteúdo de terceiros ainda não permitido
+  const SERVICE_NAME = { video: 'YouTube', social: 'Facebook', maps: 'Google Maps' };
+  function consentGate(box, kind, opts) {
+    const el = document.createElement('div');
+    el.className = 'embed-consent' + (opts.dark ? ' embed-consent--dark' : '');
+    el.innerHTML = `<p class="embed-consent__title">${opts.title}</p>
+      <p>Este conteúdo vem do ${SERVICE_NAME[kind]}, que pode gravar cookies no seu navegador.</p>
+      <div class="embed-consent__actions">
+        <button type="button" class="btn btn--primary">Permitir e carregar</button>
+        ${opts.href ? `<a class="btn btn--outline" href="${opts.href}" target="_blank" rel="noopener">${opts.hrefLabel}</a>` : ''}
+      </div>`;
+    el.querySelector('button').addEventListener('click', () => {
+      setConsent({ ...(consent || {}), [kind]: true });
+      el.remove();
+      opts.load();
+    });
+    box.appendChild(el);
+    return el;
   }
 
   // ================= Programação (horário de SP, UTC-3; dow 0 = domingo) =================
@@ -64,12 +132,17 @@
   const embedSrc = () => liveState.videoId
     ? `https://www.youtube-nocookie.com/embed/${liveState.videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`
     : `https://www.youtube-nocookie.com/embed/live_stream?channel=${CFG.youtubeChannelId}&autoplay=1&rel=0&playsinline=1`;
-  poster.addEventListener('click', () => {
-    if (!liveState) return;
+  const playLive = () => {
     const f = document.createElement('iframe');
     f.src = embedSrc(); f.title = 'Transmissão ao vivo — Casa Comunhão e Vida';
     f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true;
     playerBox.replaceChildren(f);
+  };
+  poster.addEventListener('click', () => {
+    if (!liveState) return;
+    if (allowed('video')) return playLive();
+    playerBox.replaceChildren();
+    consentGate(playerBox, 'video', { dark: true, title: 'Assistir à transmissão aqui', href: $('#live-yt').href, hrefLabel: 'Abrir no YouTube', load: playLive });
   });
   function setLive(info) {
     const changed = (liveState && liveState.videoId) !== (info && info.videoId) || !!liveState !== !!info;
@@ -98,41 +171,58 @@
   });
   // ---------- Próximo encontro + contagem regressiva ----------
   const badge = $('#next-badge'), dayEl = $('#next-day'), titleEl = $('#next-title'), nextLink = $('#next-link'), nextCard = $('.next-card');
+  const whenEl = $('#next-when'), dowEl = $('#next-dow'), hourEl = $('#next-hour');
+  const goMain = $('#next-go-main'), goSub = $('#next-go-sub'), goIcon = $('#next-go-icon');
   const units = Object.fromEntries($$('#countdown [data-u]').map(el => [el.dataset.u, el]));
   const setUnit = (el, v) => {
     if (el.textContent === v) return;
     el.textContent = v;
     if (!reduceMotion) { el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); }
   };
+  const setGo = (href, icon, main, sub) => {
+    nextLink.href = href; goIcon.setAttribute('href', icon);
+    goMain.textContent = main; goSub.textContent = sub;
+  };
+  const daysUntil = start => {
+    const n = spNow();
+    return Math.round((Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()) - Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate())) / 86400e3);
+  };
   function tick() {
     if (liveState) {
       badge.textContent = 'Ao vivo agora'; badge.classList.add('is-live');
       titleEl.textContent = liveState.title || 'Transmissão ao vivo';
-      dayEl.textContent = 'YouTube · agora';
+      dayEl.textContent = 'Transmissão no YouTube';
+      whenEl.textContent = 'Agora';
       nextCard.classList.add('is-streaming');
-      nextLink.href = '#aovivo'; nextLink.firstChild.textContent = 'Assistir agora ';
+      setGo('#aovivo', '#i-play', 'Assistir agora', 'Ao vivo aqui no site');
       return;
     }
     nextCard.classList.remove('is-streaming');
-    nextLink.href = '#visite'; nextLink.firstChild.textContent = 'Como chegar ';
+    setGo('#visite', '#i-pin', 'Av. Elísio Teixeira Leite, 73', 'Freguesia do Ó · ver como chegar');
     const [next] = occurrences(1);
     if (!next) return;
+    const endMin = next.h * 60 + next.m + next.dur;
     titleEl.textContent = next.name;
-    dayEl.textContent = `${DAYS[next.dow]} · ${fmtHour(next)}`;
+    dowEl.textContent = DAYS_SHORT[next.dow];
+    hourEl.textContent = fmtHour(next);
+    dayEl.textContent = `${DAYS[next.dow]}, das ${fmtHour(next)} às ${fmtHour({ h: Math.floor(endMin / 60) % 24, m: endMin % 60 })}`;
     if (next.live) {
       badge.textContent = 'Acontecendo agora'; badge.classList.add('is-live');
+      whenEl.textContent = 'Agora';
       ['h', 'm', 's'].forEach(u => setUnit(units[u], '00')); setUnit(units.d, '0');
       return;
     }
     badge.textContent = 'Próximo encontro'; badge.classList.remove('is-live');
+    const dd = daysUntil(next.start);
+    whenEl.textContent = dd === 0 ? 'Hoje' : dd === 1 ? 'Amanhã' : `${next.start.getUTCDate()} ${MONTHS[next.start.getUTCMonth()]}`;
     let diff = Math.max(0, Math.floor((next.start - spNow()) / 1000));
     const d = Math.floor(diff / 86400); diff -= d * 86400;
     const h = Math.floor(diff / 3600); diff -= h * 3600;
-    const m = Math.floor(diff / 60), s = diff - m * 60;
+    const m = Math.floor(diff / 60), sec = diff - m * 60;
     setUnit(units.d, String(d));
     setUnit(units.h, String(h).padStart(2, '0'));
     setUnit(units.m, String(m).padStart(2, '0'));
-    setUnit(units.s, String(s).padStart(2, '0'));
+    setUnit(units.s, String(sec).padStart(2, '0'));
   }
   tick();
   setInterval(tick, 1000);
@@ -151,19 +241,23 @@
     setInterval(check, 90000);
   }
 
-  // ---------- Semana + hoje ----------
-  const todayDow = spNow().getUTCDay();
-  const week = $('#week');
-  [1, 2, 3, 4, 5, 6, 0].forEach(dow => {
-    const list = SERVICES.filter(s => s.dow === dow);
-    const el = document.createElement('div');
-    el.className = 'week__day' + (list.length ? ' has-service' : '') + (dow === todayDow ? ' is-today' : '');
-    el.setAttribute('role', 'listitem');
-    el.innerHTML = `${DAYS_SHORT[dow]}<small>${list.length ? list.map(fmtHour).join(' · ') : '—'}</small>`;
-    el.setAttribute('aria-label', `${DAYS[dow]}: ${list.length ? list.map(s => `${s.name} às ${fmtHour(s)}`).join(', ') : 'sem encontros'}`);
-    week.appendChild(el);
-  });
-  $$('.service[data-dow]').forEach(card => { if (+card.dataset.dow === todayDow) card.classList.add('is-today'); });
+  // ---------- Programação: marca "agora", "hoje" e o próximo encontro ----------
+  function tagSchedule() {
+    const [next] = occurrences(1);
+    const now = spNow();
+    $$('.timetable .slot').forEach(slot => {
+      const dow = +slot.dataset.dow, h = +slot.dataset.h;
+      const tag = $('.slot__tag', slot);
+      const isNext = next && next.dow === dow && next.h === h;
+      slot.classList.toggle('is-next', !!isNext);
+      slot.classList.toggle('is-live', !!(isNext && next.live));
+      slot.classList.toggle('is-today', now.getUTCDay() === dow);
+      if (isNext && next.live) tag.textContent = 'Acontecendo agora';
+      else if (isNext) tag.textContent = `Próximo · ${rel(next.start).toLowerCase()}`;
+      else if (now.getUTCDay() === dow) tag.textContent = 'Hoje';
+      else tag.textContent = '';
+    });
+  }
 
   // ---------- Agenda ----------
   const agenda = $('#agenda-list');
@@ -172,6 +266,8 @@
     const days = Math.round((Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()) - Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate())) / 86400e3);
     return days === 0 ? 'Hoje' : days === 1 ? 'Amanhã' : `Em ${days} dias`;
   };
+  tagSchedule();
+  setInterval(tagSchedule, 60000);
   occurrences(5).forEach((o, i) => {
     const li = document.createElement('li');
     li.className = 'agenda__item';
@@ -248,23 +344,6 @@
     io.observe(el);
   });
   $$('[data-split]:not([data-split="hero"]), .reveal-img, .agenda__list').forEach(el => io.observe(el));
-  $$('.sermon').forEach((el, i) => { el.style.setProperty('--d', `${Math.min(i, 5) * 80}ms`); io.observe(el); });
-
-  // Contador "25"
-  const counter = $('[data-count]');
-  new IntersectionObserver(([e], obs) => {
-    if (!e.isIntersecting) return;
-    obs.disconnect();
-    const target = +counter.dataset.count;
-    if (reduceMotion) { counter.textContent = target; return; }
-    const t0 = performance.now();
-    const step = t => {
-      const p = Math.min(1, (t - t0) / 1600);
-      counter.textContent = Math.round(target * (1 - Math.pow(1 - p, 4)));
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, { threshold: 0.6 }).observe(counter);
 
   // ================= Ticker de palavras (carrossel automático do hero) =================
   const tickerEl = $('#ticker');
@@ -296,12 +375,26 @@
   });
   if (reduceMotion) gallery.classList.add('is-static');
 
+  // ================= Faixa "Comunhão e Vida": letreiro contínuo =================
+  // Repete o conteúdo até cobrir a tela duas vezes e entra no mesmo loop da galeria
+  // (anda sozinho e acelera com a rolagem).
+  $$('.statement__row').forEach(row => {
+    const unit = row.innerHTML + '<i></i>';
+    row.innerHTML = unit;
+    const reps = Math.ceil(Math.max(innerWidth, screen.width) / row.scrollWidth) + 1;
+    row.innerHTML = unit.repeat(reps * 2);
+    const m = { el: row, dir: +row.dataset.shift || -1, speed: 0.6, x: 0, visible: true, hover: false, calm: true };
+    if (m.dir > 0) m.x = -row.scrollWidth / 2;
+    new IntersectionObserver(([e]) => { m.visible = e.isIntersecting; if (m.visible) kick(); }).observe(row);
+    rows.push(m);
+  });
+
   // ================= Loop de rolagem (rAF) =================
   const nav = $('#nav'), bar = $('#progress-bar'), toTop = $('#to-top'), ring = $('#to-top-ring'), mbar = $('#mbar');
-  const hero = $('.hero'), heroCopy = $('[data-hero-parallax]'), heroStack = $('[data-hero-stack]');
+  const hero = $('.hero'), heroCopy = $('[data-hero-parallax]'), heroBg = $('[data-hero-bg]');
   const timeline = $('[data-timeline]');
   const parallaxImgs = $$('[data-parallax]');
-  const bands = $$('.statement__row');
+  const heroSideBySide = matchMedia('(min-width: 1025px)');
   const RING = 138.2;
   let lastY = scrollY, lastT = performance.now(), velocity = 0, idleTimer, drawerOpen = false, rafId = null;
 
@@ -323,9 +416,15 @@
     if (!reduceMotion) {
       if (y < vh * 1.2) {
         const k = y / vh;
-        heroCopy.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
-        heroCopy.style.opacity = String(clamp(1 - k * 1.1, 0, 1));
-        if (heroStack) heroStack.style.transform = `translate3d(0, ${y * -0.12}px, 0) rotate(${k * -4}deg)`;
+        // Parallax do texto só quando texto e cartão ficam lado a lado (desktop).
+        // Empilhados (tablet/celular), mover o texto faria o botão passar por baixo do cartão.
+        if (heroSideBySide.matches) {
+          heroCopy.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
+          heroCopy.style.opacity = String(clamp(1 - k * 1.1, 0, 1));
+        } else if (heroCopy.style.transform) {
+          heroCopy.style.transform = ''; heroCopy.style.opacity = '';
+        }
+        if (heroBg) heroBg.style.transform = `translate3d(0, ${y * 0.18}px, 0) scale(${1 + k * 0.06})`;
       }
       parallaxImgs.forEach(img => {
         const r = img.parentElement.getBoundingClientRect();
@@ -335,27 +434,19 @@
       });
       // ticker acelera junto com a rolagem
       tickerAnim.playbackRate = 1 + clamp(Math.abs(velocity) * 5, 0, 7);
-      // texto gigante percorre a faixa conforme a seção cruza a tela
-      bands.forEach(row => {
-        const r = row.parentElement.getBoundingClientRect();
-        if (r.bottom < -50 || r.top > vh + 50) return;
-        const prog = clamp((vh - r.top) / (vh + r.height), 0, 1);
-        const range = Math.max(0, row.scrollWidth - innerWidth);
-        const x = +row.dataset.shift < 0 ? -prog * range : -(1 - prog) * range;
-        row.style.transform = `translate3d(${x}px, 0, 0)`;
-      });
-      // galeria
-      const boost = clamp(Math.abs(velocity) * 6, 0, 14);
-      rows.forEach(m => {
-        if (!m.visible) return;
-        const half = m.el.scrollWidth / 2;
-        const sp = (m.hover ? m.speed * 0.15 : m.speed) + boost;
-        m.x += m.dir * sp * (dt / 16.7);
-        if (m.x <= -half) m.x += half;
-        if (m.x > 0) m.x -= half;
-        m.el.style.transform = `translate3d(${m.x}px, 0, 0) skewX(${clamp(-velocity * 3, -6, 6)}deg)`;
-      });
     }
+    // galeria + faixa. Com "reduzir movimento", só a faixa anda, devagar e sem inclinar.
+    const boost = reduceMotion ? 0 : clamp(Math.abs(velocity) * 6, 0, 14);
+    const skew = reduceMotion ? 0 : clamp(-velocity * 3, -6, 6);
+    rows.forEach(m => {
+      if (!m.visible || (reduceMotion && !m.calm)) return;
+      const half = m.el.scrollWidth / 2;
+      const sp = (m.hover ? m.speed * 0.15 : m.speed) * (reduceMotion ? 0.5 : 1) + boost;
+      m.x += m.dir * sp * (dt / 16.7);
+      if (m.x <= -half) m.x += half;
+      if (m.x > 0) m.x -= half;
+      m.el.style.transform = `translate3d(${m.x}px, 0, 0) skewX(${skew}deg)`;
+    });
 
     if (scrubWords.length) {
       const r = scrub.getBoundingClientRect();
@@ -370,7 +461,7 @@
       [...timeline.children].forEach(li => li.classList.toggle('on', li.offsetTop / r.height <= prog - 0.02 || prog >= 1));
     }
 
-    const moving = y !== lastY || Math.abs(velocity) > 0.002 || (!reduceMotion && rows.some(m => m.visible));
+    const moving = y !== lastY || Math.abs(velocity) > 0.002 || rows.some(m => m.visible && (!reduceMotion || m.calm));
     lastY = y; lastT = now;
     if (moving) rafId = requestAnimationFrame(onFrame);
     else { rafId = null; tickerAnim.playbackRate = reduceMotion ? 0.5 : 1; }
@@ -450,26 +541,35 @@
   // ================= Drawer móvel =================
   const drawer = $('#drawer'), toggle = $('.nav__toggle');
   $$('nav a', drawer).forEach((a, i) => a.style.setProperty('--i', i));
+  // Aba lateral: o fundo escurece, o painel desliza da direita, os links entram em cascata
+  // e o sanduíche vira X. Ao fechar, tudo volta na ordem inversa.
+  const drawerPanel = $('.drawer__panel', drawer);
+  let drawerTimer = null;
   function openDrawer() {
+    if (drawerOpen) return;
     drawerOpen = true;
-    drawer.hidden = false; drawer.classList.remove('is-closing');
+    clearTimeout(drawerTimer);
+    drawer.hidden = false;
+    void drawer.offsetWidth; // garante que a transição parte do estado fechado
+    drawer.classList.add('is-open');
     toggle.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
     nav.classList.remove('is-hidden');
-    $('.drawer__close', drawer).focus();
+    $('.drawer__close', drawer).focus({ preventScroll: true });
   }
   function closeDrawer(focusToggle = true) {
     if (!drawerOpen) return;
     drawerOpen = false;
+    drawer.classList.remove('is-open');
     toggle.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
-    if (reduceMotion) drawer.hidden = true;
-    else { drawer.classList.add('is-closing'); setTimeout(() => (drawer.hidden = true), 340); }
-    if (focusToggle) toggle.focus();
+    const done = () => { if (!drawerOpen) drawer.hidden = true; };
+    drawerTimer = setTimeout(done, 650);
+    if (focusToggle) toggle.focus({ preventScroll: true });
   }
-  toggle.addEventListener('click', openDrawer);
+  toggle.addEventListener('click', () => (drawerOpen ? closeDrawer() : openDrawer()));
   drawer.addEventListener('click', e => {
-    if (e.target.closest('.drawer__close')) closeDrawer();
+    if (e.target.closest('.drawer__close') || !drawerPanel.contains(e.target)) closeDrawer();
     else if (e.target.closest('a')) closeDrawer(false);
   });
   addEventListener('keydown', e => {
@@ -481,74 +581,8 @@
     }
   });
 
-  // ================= Carrossel de cultos (mobile) com dots =================
-  const services = $('#services'), dotsBox = $('[data-dots-for="services"]');
-  const cards = $$('.service', services);
-  cards.forEach(c => {
-    const b = document.createElement('button');
-    b.setAttribute('aria-label', `Ir para ${c.querySelector('h3').textContent}`);
-    b.addEventListener('click', () => services.scrollTo({ left: c.offsetLeft - services.offsetLeft - parseFloat(getComputedStyle(services).paddingLeft), behavior: 'smooth' }));
-    dotsBox.appendChild(b);
-  });
-  const dotBtns = [...dotsBox.children];
-  const syncDots = () => {
-    const idx = Math.round(services.scrollLeft / (cards[0].offsetWidth + 12));
-    dotBtns.forEach((b, i) => b.classList.toggle('on', i === clamp(idx, 0, cards.length - 1)));
-  };
-  services.addEventListener('scroll', syncDots, { passive: true });
-  syncDots();
-  const todayCard = cards.find(c => c.classList.contains('is-today'));
-  if (todayCard && isMobile()) requestAnimationFrame(() => (services.scrollLeft = todayCard.offsetLeft - services.offsetLeft - 16));
-
-  // ================= Rail de mensagens =================
-  const rail = $('#rail'), railBar = $('#rail-progress');
-  const [prevBtn, nextBtn] = $$('.rail-btn');
-  const syncRail = () => {
-    const max = rail.scrollWidth - rail.clientWidth;
-    const p = max > 0 ? rail.scrollLeft / max : 1;
-    railBar.style.transform = `scaleX(${0.1 + p * 0.9})`;
-    prevBtn.disabled = rail.scrollLeft < 8;
-    nextBtn.disabled = rail.scrollLeft > max - 8;
-  };
-  rail.addEventListener('scroll', syncRail, { passive: true });
-  syncRail();
-  [prevBtn, nextBtn].forEach(btn => btn.addEventListener('click', () => {
-    rail.scrollBy({ left: +btn.dataset.dir * rail.clientWidth * 0.8, behavior: reduceMotion ? 'auto' : 'smooth' });
-  }));
-  if (finePointer) {
-    let down = false, moved = false, startX = 0, startLeft = 0;
-    rail.addEventListener('pointerdown', e => {
-      if (e.pointerType !== 'mouse') return;
-      down = true; moved = false; startX = e.clientX; startLeft = rail.scrollLeft;
-    });
-    addEventListener('pointermove', e => {
-      if (!down) return;
-      const dx = e.clientX - startX;
-      if (Math.abs(dx) > 5) { moved = true; rail.classList.add('is-dragging'); }
-      rail.scrollLeft = startLeft - dx;
-    });
-    addEventListener('pointerup', () => {
-      if (!down) return;
-      down = false;
-      rail.classList.remove('is-dragging');
-      if (moved) rail.addEventListener('click', e => e.preventDefault(), { capture: true, once: true });
-    });
-  }
-
   // ================= Inclinação 3D + brilho nos cards (mouse) =================
   if (finePointer && !reduceMotion) {
-    $$('.sermon, .tile, .service').forEach(card => {
-      const amp = card.classList.contains('sermon') ? 10 : 6;
-      card.addEventListener('pointermove', e => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-        card.style.setProperty('--ry', `${(px - 0.5) * amp}deg`);
-        card.style.setProperty('--rx', `${(0.5 - py) * amp}deg`);
-        card.style.setProperty('--gx', `${px * 100}%`);
-        card.style.setProperty('--gy', `${py * 100}%`);
-      });
-      card.addEventListener('pointerleave', () => { card.style.setProperty('--rx', '0deg'); card.style.setProperty('--ry', '0deg'); });
-    });
     $$('.magnetic').forEach(btn => {
       btn.addEventListener('pointermove', e => {
         const r = btn.getBoundingClientRect();
@@ -615,9 +649,11 @@
 
   // ================= Facebook (carrega só quando chega perto) =================
   const fbFrame = $('#fb-frame');
-  new IntersectionObserver(([e], obs) => {
-    if (!e.isIntersecting) return;
-    obs.disconnect();
+  let fbLoaded = false;
+  function loadFacebook() {
+    if (fbLoaded) return;
+    fbLoaded = true;
+    $('.embed-consent', fbFrame)?.remove();
     const w = clamp(Math.round(fbFrame.clientWidth), 180, 500);
     const h = Math.max(400, Math.round(fbFrame.clientHeight));
     const f = document.createElement('iframe');
@@ -627,17 +663,131 @@
     f.style.cssText = `left:50%;translate:-50% 0;width:${w}px`;
     f.addEventListener('load', () => fbFrame.classList.add('is-loaded'));
     fbFrame.appendChild(f);
+  }
+  new IntersectionObserver(([e], obs) => {
+    if (!e.isIntersecting) return;
+    obs.disconnect();
+    if (allowed('social')) loadFacebook();
+    else {
+      fbFrame.classList.add('is-blocked');
+      consentGate(fbFrame, 'social', { title: 'Publicações da igreja no Facebook', href: CFG.facebookPage, hrefLabel: 'Abrir no Facebook', load: loadFacebook });
+    }
   }, { rootMargin: '500px' }).observe(fbFrame);
+  onConsent(() => { if (allowed('social') && fbFrame.classList.contains('is-blocked')) { fbFrame.classList.remove('is-blocked'); loadFacebook(); } });
 
-  // ================= Copiar PIX =================
-  const copyBtn = $('#copy-pix');
-  copyBtn.addEventListener('click', async () => {
-    const label = copyBtn.querySelector('span');
-    const key = $('#pix-key');
-    try { await navigator.clipboard.writeText(key.dataset.copy || key.textContent.trim()); label.textContent = 'Chave copiada!'; }
-    catch { label.textContent = 'Selecione e copie a chave'; }
-    setTimeout(() => (label.textContent = 'Copiar chave'), 2500);
+  // ================= Mapa (Google Maps) =================
+  const mapBox = $('#map');
+  let mapLoaded = false;
+  function loadMap() {
+    if (mapLoaded) return;
+    mapLoaded = true;
+    $('.embed-consent', mapBox)?.remove();
+    const f = document.createElement('iframe');
+    f.title = 'Mapa: Igreja Casa Comunhão e Vida'; f.loading = 'lazy'; f.referrerPolicy = 'no-referrer-when-downgrade';
+    f.src = mapBox.dataset.src;
+    mapBox.appendChild(f);
+  }
+  if (allowed('maps')) loadMap();
+  else consentGate(mapBox, 'maps', { title: 'Mapa de como chegar', href: 'https://www.google.com/maps/search/?api=1&query=Igreja%20Casa%20Comunh%C3%A3o%20e%20Vida%2C%20Av.%20El%C3%ADsio%20Teixeira%20Leite%2C%2073%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2002801-000', hrefLabel: 'Abrir no Google Maps', load: loadMap });
+  onConsent(() => allowed('maps') && loadMap());
+
+  // ================= Mensagens: player aberto na página + lista =================
+  const sPlayer = $('#sermon-player'), sList = $('#sermon-list');
+  const sPoster = $('.sermons__poster', sPlayer);
+  let sCurrent = $('.sermon-row.is-current', sList), sStarted = false;
+  const embedSermon = (row, autoplay) => {
+    const f = document.createElement('iframe');
+    f.src = `https://www.youtube-nocookie.com/embed/${row.dataset.video}?rel=0&playsinline=1${autoplay ? '&autoplay=1' : ''}`;
+    f.title = row.dataset.title;
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true;
+    sPlayer.replaceChildren(f);
+  };
+  function showSermon(row, autoplay) {
+    sStarted = true;
+    if (allowed('video')) return embedSermon(row, autoplay);
+    sPoster.src = row.dataset.poster;
+    sPlayer.replaceChildren(sPoster);
+    consentGate(sPlayer, 'video', { dark: true, title: 'Assistir aqui no site', href: row.href, hrefLabel: 'Abrir no YouTube', load: () => embedSermon(sCurrent, true) });
+  }
+  // Só carrega o player quando a seção chega perto da tela.
+  new IntersectionObserver(([e], obs) => {
+    if (!e.isIntersecting) return;
+    obs.disconnect();
+    if (!sStarted) showSermon(sCurrent, false);
+  }, { rootMargin: '400px 0px' }).observe(sPlayer);
+  onConsent(() => { if (sStarted && allowed('video') && !$('iframe', sPlayer)) embedSermon(sCurrent, false); });
+  sList.addEventListener('click', e => {
+    const row = e.target.closest('.sermon-row');
+    if (!row || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    if (row !== sCurrent) {
+      sCurrent.classList.remove('is-current'); sCurrent.removeAttribute('aria-current');
+      row.classList.add('is-current'); row.setAttribute('aria-current', 'true');
+      sCurrent = row;
+      $('#sermon-tag').textContent = row === $('.sermon-row', sList) ? 'Mensagem mais recente' : 'Assistindo agora';
+      $('#sermon-title').textContent = row.dataset.title;
+      $('#sermon-meta').textContent = row.dataset.meta;
+      $('#sermon-yt').href = row.href;
+    }
+    showSermon(row, true);
+    // No celular o player fica acima da lista: leva a pessoa até ele.
+    const r = sPlayer.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > innerHeight) sPlayer.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
   });
+
+  // ================= PIX: QR Code (BR Code estático) + copiar =================
+  const PIX = { key: '05136068000116', name: 'CASA COMUNHAO E VIDA', city: 'SAO PAULO' };
+  const emv = (id, v) => id + String(v.length).padStart(2, '0') + v;
+  function crc16(str) {
+    let crc = 0xFFFF;
+    for (let i = 0; i < str.length; i++) {
+      crc ^= str.charCodeAt(i) << 8;
+      for (let j = 0; j < 8; j++) crc = crc & 0x8000 ? ((crc << 1) ^ 0x1021) & 0xFFFF : (crc << 1) & 0xFFFF;
+    }
+    return crc.toString(16).toUpperCase().padStart(4, '0');
+  }
+  const brPayload = emv('00', '01') + emv('26', emv('00', 'br.gov.bcb.pix') + emv('01', PIX.key)) +
+    emv('52', '0000') + emv('53', '986') + emv('58', 'BR') + emv('59', PIX.name) + emv('60', PIX.city) +
+    emv('62', emv('05', '***')) + '6304';
+  const brCode = brPayload + crc16(brPayload);
+  window.CCV_PIX = brCode; // útil para conferência
+  const qrBox = $('#pix-qr');
+  const drawQr = () => {
+    if (!window.qrcode) return false;
+    const qr = window.qrcode(0, 'M'); // nível M aguenta a logo no centro
+    qr.addData(brCode); qr.make();
+    qrBox.insertAdjacentHTML('afterbegin', qr.createSvgTag({ cellSize: 6, margin: 0, scalable: true }));
+    qrBox.classList.add('is-ready');
+    return true;
+  };
+  if (!drawQr()) addEventListener('load', () => { if (!drawQr()) { qrBox.hidden = true; $('#pix-qr-toggle').hidden = true; } });
+
+  // No celular o QR fica recolhido (ninguém escaneia a própria tela); botão abre para usar em outro aparelho.
+  const qrToggle = $('#pix-qr-toggle');
+  qrToggle.addEventListener('click', () => {
+    const open = qrToggle.getAttribute('aria-expanded') !== 'true';
+    qrToggle.setAttribute('aria-expanded', String(open));
+    qrToggle.firstChild.textContent = open ? 'Ocultar QR Code ' : 'Mostrar QR Code ';
+    $('.pix').classList.toggle('is-qr-open', open);
+  });
+
+  const pixStatus = $('#pix-status');
+  const pixDefault = pixStatus.textContent;
+  async function copyText(text, btn, okLabel, isPix = true) {
+    const label = btn.querySelector('span');
+    const original = label.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      label.textContent = okLabel;
+      if (isPix) { pixStatus.textContent = 'Copiado. Agora é só colar no app do seu banco.'; pixStatus.classList.add('is-ok'); }
+    } catch {
+      label.textContent = 'Não foi possível copiar';
+    }
+    setTimeout(() => { label.textContent = original; if (isPix) { pixStatus.textContent = pixDefault; pixStatus.classList.remove('is-ok'); } }, 3000);
+  }
+  $('#copy-pix').addEventListener('click', e => copyText($('#pix-key').dataset.copy, e.currentTarget, 'Chave copiada!'));
+  $('#copy-address').addEventListener('click', e => copyText(e.currentTarget.dataset.copy, e.currentTarget, 'Copiado!', false));
+  $('#copy-brcode').addEventListener('click', e => copyText(brCode, e.currentTarget, 'Código copiado!'));
 
   // ================= Formulário → WhatsApp =================
   const form = $('#visit-form'), nameField = $('#f-name');

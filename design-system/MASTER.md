@@ -80,11 +80,29 @@ O loop de animação só roda enquanto há rolagem ou um marquee visível (econo
 - **Abertura** com o logo se desenhando (1x por sessão), **faixa gigante** ligada à rolagem, **menu com pílula deslizante**, **ondas nos botões**, **inclinação 3D** nos cards, **scroll suave** com easing próprio, **ticker de palavras** no hero (acelera com a rolagem).
 - **Animações**: o site respeita "reduzir movimento" do sistema, mas mostra um aviso com botão "Ativar" e há um alternador no rodapé (preferência salva no navegador).
 
+## Revisão v3 (pedidos da igreja)
+
+- **Logo**: usar sempre a logo original (`assets/logo.png` branca, `assets/logo-dark.png` escura, extraídas do avatar oficial em `_source/brand/`). A versão redesenhada em SVG foi descartada: não alterar proporções nem redesenhar.
+- **Hero**: uma foto real do culto em tela cheia com gradiente escuro (sem pilha de fotos).
+- **Programação**: tabela editorial (dia, hora grande, nome, descrição) com marcação automática de "Próximo", "Hoje" e "Acontecendo agora". Nada de calendário.
+- **Ministérios**: blocos editoriais (foto + texto abaixo, filete superior, numeração). Não são clicáveis, então não têm cartão, ícone, sombra, hover nem inclinação.
+- **Mensagens**: cada arte abre o vídeo correspondente (conferido pela miniatura do YouTube) num player dentro da página.
+- **Dízimos**: seção própria em destaque, com QR Code PIX (BR Code estático gerado no navegador, CRC conferido e QR decodificado em teste), chave e "PIX copia e cola".
+- Fotos individuais foram recortadas das colagens do Instagram (`hero-louvor`, `maos-erguidas`, `louvor-violao`, `intercessao`, `casal-ceia`, `ceia`, `acolhimento`, `pastor-palavra`, `oracao-grupo`, `adoracao-mao`).
+
+## Cookies e privacidade (LGPD)
+
+- Por padrão só existe o cookie essencial `ccv_consent` (guarda a escolha, 180 dias). Não há analytics nem anúncios.
+- YouTube, Facebook e Google Maps só carregam com permissão (por serviço). Sem permissão, aparece um aviso no lugar com "Permitir e carregar" e um link para abrir no próprio serviço.
+- No aviso, "Recusar opcionais" e "Aceitar todos" têm o mesmo peso visual (não induzir o aceite). "Preferências de cookies" fica no rodapé; `index.html#cookies` abre direto as preferências.
+- Ao incluir qualquer novo serviço externo (ex.: Google Analytics, Pixel), ele precisa entrar no consentimento e na tabela de `privacidade.html`.
+- Animações seguem apenas a preferência de movimento do sistema (sem alternador no site).
+
 ## Pendências para produção
 
 1. Pedir à igreja os originais das fotos e autorização de uso de imagem (as atuais vieram do Instagram, em até 1254px).
 2. Publicar o detector de live (`worker/live.js`) e preencher `liveEndpoint` em `js/config.js`.
 2b. Endereço completo (não está público em nenhuma das fontes) e o pino do mapa.
-3. ~~Chave PIX oficial~~ (CNPJ 05.136.068/0001-16, Caixa — já aplicada no site).
+3. ~~Chave PIX oficial~~ (CNPJ 05.136.068/0001-16, Caixa). QR Code já no site; vale fazer um PIX de teste pelo QR antes de divulgar.
 4. Links diretos para as playlists/vídeos de cada série no YouTube.
 5. Arte oficial do logo em SVG (o atual foi redesenhado a partir da foto de perfil).
