@@ -6,17 +6,28 @@
 // watch?v=<ID>). Não precisa de chave de API.
 
 const CHANNEL_ID = 'UC_sjEfh6Hs3HuULlfOvLpEw';
-const ALLOWED_ORIGIN = '*'; // em produção, troque pelo domínio do site, ex.: 'https://casacomunhaoevida.com.br'
 
-const cors = {
-  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  'Cache-Control': 'public, max-age=30',
+// Origem permitida (CORS): defina a variável ALLOWED_ORIGIN no painel do Worker
+// (Settings → Variables), ex.: https://casacomunhaoevida.com.br. Aceita vários, separados por vírgula.
+// Sem a variável, nenhuma origem é liberada (falha fechada).
+const headersFor = (request, env) => {
+  const allowed = (env.ALLOWED_ORIGIN || '').split(',').map(o => o.trim()).filter(Boolean);
+  const origin = request.headers.get('Origin');
+  const h = {
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Cache-Control': 'public, max-age=30',
+    'X-Content-Type-Options': 'nosniff',
+    Vary: 'Origin',
+  };
+  if (origin && allowed.includes(origin)) h['Access-Control-Allow-Origin'] = origin;
+  return h;
 };
 
 export default {
-  async fetch(request) {
+  async fetch(request, env) {
+    const cors = headersFor(request, env);
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+    if (request.method !== 'GET') return new Response(null, { status: 405, headers: { ...cors, Allow: 'GET, OPTIONS' } });
 
     let body = { live: false };
     try {
@@ -34,7 +45,7 @@ export default {
       const isLive = /"isLiveNow":true/.test(html);
       if (videoId && isLive) {
         const title = (html.match(/<meta property="og:title" content="([^"]*)"/) || [])[1] || '';
-        body = { live: true, videoId, title: decodeEntities(title) };
+        body = { live: true, videoId, title: decodeEntities(title).slice(0, 140) };
       }
     } catch (e) {
       body = { live: false, error: true };

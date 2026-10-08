@@ -14,14 +14,7 @@
   <link rel="preload" as="image" href="assets/photos/hero-louvor.webp" type="image/webp">
   <link rel="stylesheet" href="design-system/tokens.css?v=20261008-15">
   <link rel="stylesheet" href="css/site.css?v=20261008-15">
-  <script>
-    (function () {
-      var d = document.documentElement, os = false;
-      try { os = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-      d.classList.add('js');
-      d.dataset.motion = os ? 'reduced' : 'full';
-    })();
-  </script>
+  <script src="js/boot.js?v=20261008-15"></script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Church", "name": "Igreja Casa Comunhão e Vida", "telephone": "+55-11-96551-4736", "address": {"@type": "PostalAddress", "streetAddress": "Av. Elísio Teixeira Leite, 73", "addressLocality": "São Paulo", "addressRegion": "SP", "postalCode": "02801-000", "addressCountry": "BR"}, "sameAs": ["https://www.instagram.com/casacomunhaoevida/", "https://www.youtube.com/@casacomunhaoevida2023", "https://www.facebook.com/cristocentrofreguesia/"]}</script>
 </head>
 <body>
@@ -767,7 +760,7 @@
   <button class="lightbox__btn lightbox__next" data-lb="1" aria-label="Próxima foto"><svg class="ico"><use href="#i-right"/></svg></button>
 </dialog>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha384-mZT2gIty7ZDdOGkxfP6joZcYdMW1Jvj9dRlfpTmaJAKKXTqzygtB22k7FLe+KZC1" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 <script src="js/config.js?v=20261008-15"></script>
 <script src="js/site.js?v=20261008-15" defer></script>
 </body>

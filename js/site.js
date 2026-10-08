@@ -127,6 +127,7 @@
   const fmtHour = s => `${s.h}h${s.m ? String(s.m).padStart(2, '0') : ''}`;
 
   // ---------- Ao vivo no YouTube ----------
+  const YT_ID = /^[\w-]{11}$/;
   let liveState = null; // { videoId, title, preview }
   const liveSec = $('#aovivo'), navLive = $('#nav-live'), playerBox = $('#live-player'), poster = $('#live-poster');
   const embedSrc = () => liveState.videoId
@@ -145,6 +146,7 @@
     consentGate(playerBox, 'video', { dark: true, title: 'Assistir à transmissão aqui', href: $('#live-yt').href, hrefLabel: 'Abrir no YouTube', load: playLive });
   });
   function setLive(info) {
+    if (info && info.videoId && !YT_ID.test(info.videoId)) info = info.preview ? { ...info, videoId: null } : null;
     const changed = (liveState && liveState.videoId) !== (info && info.videoId) || !!liveState !== !!info;
     liveState = info;
     if (info) {

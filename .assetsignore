@@ -1,0 +1,9 @@
+# Arquivos que NÃO devem ir ao ar quando publicado com Cloudflare Workers Static Assets.
+_source
+worker
+.claude
+.github
+design-system/MASTER.md
+design-system/tokens.json
+README.md
+.assetsignore

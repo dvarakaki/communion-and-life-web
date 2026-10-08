@@ -9,7 +9,10 @@ perguntar isso ao YouTube diretamente (bloqueio de CORS), usamos um mini-endpoin
 2. Cole o conteúdo de `live.js` e clique em **Deploy**.
 3. Copie a URL gerada (algo como `https://ccv-live.seu-usuario.workers.dev`).
 4. Em `js/config.js`, preencha: `liveEndpoint: 'https://ccv-live.seu-usuario.workers.dev'`.
-5. (Recomendado) Em `live.js`, troque `ALLOWED_ORIGIN` pelo domínio real do site.
+5. **Obrigatório:** em **Settings → Variables**, crie `ALLOWED_ORIGIN` com o domínio real do site
+   (ex.: `https://casacomunhaoevida.com.br`; vários, separados por vírgula). Sem isso o navegador bloqueia a resposta.
+6. (Recomendado) Em **Security → WAF → Rate limiting rules**, limite o endpoint a ~30 requisições/minuto por IP.
+   O Worker já guarda a resposta em cache por 30 s, então o YouTube é consultado no máximo 2x/minuto por região.
 
 O site consulta o endpoint ao abrir a página e a cada 90 segundos enquanto ela estiver aberta.
 
