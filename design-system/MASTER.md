@@ -76,7 +76,7 @@ O loop de animação só roda enquanto há rolagem ou um marquee visível (econo
 ## Novidades desta versão
 
 - **Ao vivo**: seção que só aparece quando o canal do YouTube está transmitindo (botão "Ao vivo" no menu, cartão do hero vira "Ao vivo agora"). Precisa do endpoint em `worker/` (ver `worker/README.md`) preenchido em `js/config.js`. Teste visual: `?live=1`.
-- **Redes**: feed da página do Facebook embutido (carrega só quando chega perto) + cartões de YouTube, Instagram, Facebook e WhatsApp.
+- **Redes**: feed da página do Facebook embutido (carrega só quando chega perto) + lista editorial de canais (YouTube, Instagram, Facebook e WhatsApp) no mesmo padrão da Programação: filete superior, rótulo pequeno, título condensado e seta. Sem cores das marcas: só tinta e laranja.
 - **Abertura** com o logo se desenhando (1x por sessão), **faixa gigante** ligada à rolagem, **menu com pílula deslizante**, **ondas nos botões**, **inclinação 3D** nos cards, **scroll suave** com easing próprio, **ticker de palavras** no hero (acelera com a rolagem).
 - **Animações**: o site respeita "reduzir movimento" do sistema, mas mostra um aviso com botão "Ativar" e há um alternador no rodapé (preferência salva no navegador).
 

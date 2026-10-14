@@ -546,51 +546,54 @@
 
 <!-- REDES -->
 <section class="section" id="redes">
-  <div class="container">
-    <div class="section__head section__head--split">
-      <div>
-        <p class="eyebrow reveal">Acompanhe</p>
-        <h2 class="section__title" data-split>Nossa casa nas <em>redes</em></h2>
-      </div>
-      <p class="section__lead reveal">Avisos, fotos e mensagens do dia a dia da igreja. Acompanhe pelo Facebook, YouTube e Instagram.</p>
+  <div class="container social-grid">
+    <div class="social__main">
+      <p class="eyebrow reveal">Acompanhe</p>
+      <h2 class="section__title" data-split>Nossa casa nas <em>redes</em></h2>
+      <p class="section__lead reveal">Avisos, fotos e mensagens do dia a dia da igreja. Escolha onde prefere acompanhar.</p>
+
+      <ul class="channels" aria-label="Canais da igreja">
+        <li class="reveal">
+          <a class="channel" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
+            <svg class="ico channel__icon" aria-hidden="true"><use href="#i-youtube"/></svg>
+            <span class="channel__body"><small>YouTube</small><strong>Cultos e mensagens completas</strong><span>Inscreva-se no canal e assista de onde estiver.</span></span>
+            <svg class="ico channel__go" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+        </li>
+        <li class="reveal">
+          <a class="channel" href="https://www.instagram.com/casacomunhaoevida/" target="_blank" rel="noopener">
+            <svg class="ico channel__icon" aria-hidden="true"><use href="#i-instagram"/></svg>
+            <span class="channel__body"><small>Instagram</small><strong>@casacomunhaoevida</strong><span>Fotos, stories e avisos da semana.</span></span>
+            <svg class="ico channel__go" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+        </li>
+        <li class="reveal">
+          <a class="channel" href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener">
+            <svg class="ico channel__icon" aria-hidden="true"><use href="#i-facebook"/></svg>
+            <span class="channel__body"><small>Facebook</small><strong>Igreja Casa Comunhão e Vida</strong><span>Curta a página e receba as publicações.</span></span>
+            <svg class="ico channel__go" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+        </li>
+        <li class="reveal">
+          <a class="channel" href="https://wa.me/5511965514736" target="_blank" rel="noopener">
+            <svg class="ico channel__icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+            <span class="channel__body"><small>WhatsApp</small><strong>(11) 96551-4736</strong><span>Fale com a gente, tire dúvidas e peça oração.</span></span>
+            <svg class="ico channel__go" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+        </li>
+      </ul>
     </div>
 
-    <div class="social-grid">
-      <article class="fb reveal" data-reveal="left">
-        <header class="fb__head">
-          <span class="fb__logo"><svg class="ico"><use href="#i-facebook"/></svg></span>
-          <span class="fb__who"><strong>Igreja Casa Comunhão e Vida</strong><small>São Paulo, SP · Facebook</small></span>
-          <a class="fb__open" href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener" aria-label="Abrir a página no Facebook"><svg class="ico"><use href="#i-external"/></svg></a>
-        </header>
-        <div class="fb__frame" id="fb-frame">
-          <div class="fb__skeleton" aria-hidden="true"><i></i><i></i><i></i></div>
-          <p class="fb__fallback">Se a página não aparecer, <a href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener">abra direto no Facebook</a>.</p>
-        </div>
-      </article>
-
-      <div class="social-cards">
-        <a class="scard scard--yt reveal" data-reveal="right" href="https://www.youtube.com/@casacomunhaoevida2023" target="_blank" rel="noopener">
-          <svg class="ico ico--xl"><use href="#i-youtube"/></svg>
-          <span class="scard__body"><small>YouTube</small><strong>Cultos e mensagens completas</strong><em>Inscreva-se no canal</em></span>
-          <svg class="ico scard__go"><use href="#i-arrow"/></svg>
-        </a>
-        <a class="scard scard--ig reveal" data-reveal="right" href="https://www.instagram.com/casacomunhaoevida/" target="_blank" rel="noopener">
-          <svg class="ico ico--xl"><use href="#i-instagram"/></svg>
-          <span class="scard__body"><small>Instagram</small><strong>@casacomunhaoevida</strong><em>Fotos, stories e avisos</em></span>
-          <svg class="ico scard__go"><use href="#i-arrow"/></svg>
-        </a>
-        <a class="scard scard--fb reveal" data-reveal="right" href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener">
-          <svg class="ico ico--xl"><use href="#i-facebook"/></svg>
-          <span class="scard__body"><small>Facebook</small><strong>Igreja Casa Comunhão e Vida</strong><em>Curta a nossa página</em></span>
-          <svg class="ico scard__go"><use href="#i-arrow"/></svg>
-        </a>
-        <a class="scard scard--wa reveal" data-reveal="right" href="https://wa.me/5511965514736" target="_blank" rel="noopener">
-          <svg class="ico ico--xl"><use href="#i-whatsapp"/></svg>
-          <span class="scard__body"><small>WhatsApp</small><strong>(11) 96551-4736</strong><em>Fale com a gente</em></span>
-          <svg class="ico scard__go"><use href="#i-arrow"/></svg>
-        </a>
+    <article class="feed reveal">
+      <header class="feed__head">
+        <span>Últimas publicações</span>
+        <a href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener">Abrir no Facebook</a>
+      </header>
+      <div class="fb__frame" id="fb-frame">
+        <div class="fb__skeleton" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p class="fb__fallback">Se a página não aparecer, <a href="https://www.facebook.com/cristocentrofreguesia/" target="_blank" rel="noopener">abra direto no Facebook</a>.</p>
       </div>
-    </div>
+    </article>
   </div>
 </section>
 
